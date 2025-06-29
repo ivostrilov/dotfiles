@@ -1,0 +1,38 @@
+configure_history() {
+  setopt histignorealldups sharehistory
+
+  # Keep 1000 lines of history within the shell and save it to ~/.zsh_history:
+  HISTSIZE=1000
+  SAVEHIST=1000
+  HISTFILE=~/.zsh_history
+}
+
+configure_welcome_promt() {
+  PROMPT='%~ %# '
+}
+
+configure_alias() {
+  alias ll="ls -l"
+}
+
+configure_path() {
+  local my_paths=(
+    "$HOME/.local/bin"
+  )
+
+  local my_path=""
+  for my_path in "${my_paths[@]}"; do
+    if [[ ":$PATH:" != *":$my_path:"* ]]; then
+      export PATH="$my_path:$PATH"
+    fi
+  done
+}
+
+main() {
+  configure_history
+  configure_welcome_promt
+  configure_alias
+  configure_path
+}
+
+main "$@"
