@@ -1,0 +1,55 @@
+configure_history() {
+  setopt histignorealldups sharehistory
+
+  # Keep 1000 lines of history within the shell and save it to ~/.zsh_history:
+  HISTSIZE=1000
+  SAVEHIST=1000
+  HISTFILE=~/.zsh_history
+}
+
+configure_welcome_promt() {
+  PROMPT='%~ %# '
+}
+
+configure_alias() {
+  alias ll="ls -l"
+}
+
+configure_path() {
+  my_paths=(
+    "$HOME/.local/bin"
+  )
+
+  local my_path=""
+  for my_path in "${my_paths[@]}"; do
+    if [[ ":$PATH:" != *":$my_path:"* ]]; then
+      export PATH="$my_path:$PATH"
+    fi
+  done
+}
+
+configure_git_completion() {
+  autoload -Uz compinit && compinit
+}
+
+configure_fzf() {
+  source <(fzf --zsh)
+}
+
+# Require installed fzf
+gd() {
+  local preview='git diff $@ --color=always -- {-1}'
+  git diff "$@" --name-only |
+    fzf -m --ansi --preview "$preview"
+}
+
+main() {
+  configure_history
+  configure_welcome_promt
+  configure_alias
+  configure_path
+  configure_git_completion
+  configure_fzf
+}
+
+main "$@"

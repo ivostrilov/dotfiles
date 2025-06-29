@@ -1,0 +1,3 @@
+Nerd fonts aggregator.
+I like 'Iosevka Nerd Font'.
+https://www.nerdfonts.com/font-downloads
