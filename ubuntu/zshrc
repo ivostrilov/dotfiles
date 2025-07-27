@@ -1,0 +1,65 @@
+# Set up the prompt
+
+configure_history() {
+  setopt histignorealldups sharehistory
+
+  # Keep 1000 lines of history within the shell and save it to ~/.zsh_history:
+  HISTSIZE=1000
+  SAVEHIST=1000
+  HISTFILE=~/.zsh_history
+}
+
+configure_welcome_promt() {
+  PROMPT='%~ %# '
+}
+
+configure_alias() {
+  alias ll="ls -l"
+}
+
+configure_flatpack_alias() {
+  local base_prefix="nohup flatpak run"
+  local base_postfix="> /dev/null 2>&1 &"
+
+
+  alias telegram="${base_prefix} org.telegram.desktop ${base_postfix}"
+  alias bitwarden="${base_prefix} com.bitwarden.desktop ${base_postfix}"
+}
+
+configure_path() {
+  local my_paths=(
+    "$HOME/.local/bin"
+  )
+
+  local my_path=""
+  for my_path in "${my_paths[@]}"; do
+    if [[ ":$PATH:" != *":$my_path:"* ]]; then
+      export PATH="$my_path:$PATH"
+    fi
+  done
+}
+
+configure_xdg_data_dirs() {
+  local my_paths=(
+    "/var/lib/flatpak/exports/share"
+    "/home/i-vostrilov/.local/share/flatpak/exports/share"
+  )
+
+  local my_path=""
+  for my_path in "${my_paths[@]}"; do
+    if [[ ":$XDG_DATA_DIRS:" != *":$my_path:"* ]]; then
+      export XDG_DATA_DIRS="$my_path:$XDG_DATA_DIRS"
+    fi
+  done
+}
+
+main() {
+  configure_history
+  configure_welcome_promt
+  configure_alias
+  configure_flatpack_alias
+  configure_path
+  configure_xdg_data_dirs
+}
+
+main "$@"
